@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts (CMake/MSVC)
+build/
+*.obj
+*.pdb
+*.sln
+*.vcxproj
+*.dll
+*.exe
+*.lib
+*.exp
+*.ilk
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Temp directory
+Temp/
+
+# Logs
+*.log
+
+# PaddleOCR cache (model downloads)
+inference/
