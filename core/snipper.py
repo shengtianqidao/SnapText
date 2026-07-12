@@ -90,6 +90,7 @@ class Snipper(QWidget):
 
     def _finish(self, rect: QRect):
         self.hide()
+        QApplication.processEvents()
         screen_geo = QApplication.primaryScreen().geometry()
         offset = screen_geo.topLeft()
         abs_x = rect.x() + offset.x()

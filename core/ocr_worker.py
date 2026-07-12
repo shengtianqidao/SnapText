@@ -1,13 +1,15 @@
 import logging
+import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 
 logger = logging.getLogger("OCRWorker")
 
 _ocr_engine = None
+_engine_ready = False
 
 
 def get_ocr_engine():
-    global _ocr_engine
+    global _ocr_engine, _engine_ready
     if _ocr_engine is None:
         from paddleocr import PaddleOCR
         _ocr_engine = PaddleOCR(
@@ -15,8 +17,20 @@ def get_ocr_engine():
             lang="ch",
             show_log=False
         )
-        logger.info("PaddleOCR engine initialized")
+        logger.info("PaddleOCR engine initialized, warming up...")
+        _warmup(_ocr_engine)
+        _engine_ready = True
+        logger.info("PaddleOCR engine ready")
     return _ocr_engine
+
+
+def _warmup(ocr):
+    try:
+        dummy = np.ones((32, 128, 3), dtype=np.uint8) * 255
+        ocr.ocr(dummy, cls=True)
+        logger.info("PaddleOCR warmup done")
+    except Exception as e:
+        logger.warning("PaddleOCR warmup failed (non-fatal): %s", e)
 
 
 class OCRWorker(QThread):

@@ -489,10 +489,18 @@ class MainWindow(QWidget):
             return
         if self.ocr_worker and self.ocr_worker.isRunning():
             return
+        if self.ocr_worker:
+            try:
+                self.ocr_worker.result_ready.disconnect(self._on_ocr_result)
+                self.ocr_worker.ocr_failed.disconnect(self._on_ocr_error)
+                self.ocr_worker.finished.disconnect(self._on_ocr_finished)
+            except TypeError:
+                pass
         self.btn_ocr.setEnabled(False)
         self.btn_ocr.setText("Recognizing...")
         merged = self.canvas.get_merged_pixmap()
         img_array = qpixmap_to_numpy(merged)
+        logger.info("OCR image array shape: %s dtype: %s", img_array.shape, img_array.dtype)
         self.ocr_worker = OCRWorker(img_array)
         self.ocr_worker.result_ready.connect(self._on_ocr_result, Qt.QueuedConnection)
         self.ocr_worker.ocr_failed.connect(self._on_ocr_error, Qt.QueuedConnection)
