@@ -61,7 +61,18 @@ def create_app_icon() -> QIcon:
     return icon
 
 
+def _hide_console():
+    try:
+        import ctypes
+        hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+        if hwnd:
+            ctypes.windll.user32.ShowWindow(hwnd, 0)
+    except Exception:
+        pass
+
+
 def main():
+    _hide_console()
     app = QApplication(sys.argv)
     app.setApplicationName("SnapText")
     icon = create_app_icon()

@@ -426,17 +426,19 @@ class MainWindow(QWidget):
 
     def _start_snip(self):
         logger.info("Snipper started")
-        self.hide()
+        self.showMinimized()
         QApplication.processEvents()
         from PyQt5.QtCore import QTimer
-        QTimer.singleShot(150, self._show_snipper)
+        QTimer.singleShot(200, self._show_snipper)
 
     def _show_snipper(self):
         self.snipper = Snipper(self)
         self.snipper.show()
 
     def load_image(self, pil_image):
-        self.show()
+        self.showNormal()
+        self.raise_()
+        self.activateWindow()
         pixmap = pil_to_qpixmap(pil_image)
         if self.placeholder_label:
             self.canvas_layout.removeWidget(self.placeholder_label)
@@ -454,7 +456,9 @@ class MainWindow(QWidget):
         logger.info("Image loaded: %dx%d", pixmap.width(), pixmap.height())
 
     def on_snip_cancelled(self):
-        self.show()
+        self.showNormal()
+        self.raise_()
+        self.activateWindow()
         logger.info("Snip cancelled, window restored")
 
     def _on_tool_changed(self, idx):

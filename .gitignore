@@ -20,7 +20,9 @@ ENV/
 *.swo
 *~
 
-# Build artifacts (CMake/MSVC)
+# PyInstaller
+*.spec
+dist/
 build/
 *.obj
 *.pdb
